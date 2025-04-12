@@ -1,7 +1,6 @@
 import csv
 from collections import OrderedDict
-from pprint import pprint
-from time import sleep
+from asyncio import sleep, run
 from typing import NamedTuple
 
 from bs4 import BeautifulSoup
@@ -114,6 +113,12 @@ DATA_SPEC_FIELDS = OrderedDict({
 })
 
 
+async def sleep_with_counter(seconds: int) -> None:
+    for i in range(seconds, 0, -1):
+        print(f'Sleeping for {i} seconds', end='\r')
+        await sleep(1)
+
+
 class PhoneLink(NamedTuple):
     phone_name: str
     phone_link: str
@@ -173,11 +178,11 @@ def main():
                 csv_row.append(value)
 
             append_to_result(csv_row)
-            sleep(5)
+            run(sleep_with_counter(17))
 
         except Exception as e:
             print(f'Skipping {name} because of error:\n{e}')
-            sleep(5)
+            run(sleep_with_counter(17))
             continue
 
 
