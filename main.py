@@ -158,8 +158,6 @@ def parse_value_from_soup(soup: BeautifulSoup, key: str) -> str:
 
 def append_to_result(row: list[str]) -> None:
     with open('result.csv', 'a') as file:
-        str_to_append = '\t'.join(row)
-        print(str_to_append)
         file.write('\t'.join(row) + '\n')
 
 
