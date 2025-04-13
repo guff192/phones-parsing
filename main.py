@@ -136,7 +136,9 @@ def get_phone_links() -> list[PhoneLink]:
 
 
 def get_page_text(link: str) -> str:
-    return get_request(link).text
+    response = get_request(link)
+    print(f'Status code: {response.status_code} for {link}')
+    return response.text
 
 
 def get_page_soup(response_text: str) -> BeautifulSoup:
