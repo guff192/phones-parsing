@@ -163,28 +163,34 @@ def append_to_result(row: list[str]) -> None:
         file.write('\t'.join(row) + '\n')
 
 
+def get_phone_data(link: str) -> list[str]:
+    data: list[str] = []
+
+    page_text = get_page_text(link)
+    soup = get_page_soup(page_text)
+    for key in DATA_SPEC_FIELDS.values():
+        value = parse_value_from_soup(soup, key)
+        data.append(value)
+
+    return data
+
+
 def main():
     print('Getting phone links from file')
     phone_links = get_phone_links()
+
     print('Starting phones parsing!')
     for name, link in phone_links:
         print(f'\n\n\nParsing data for {name}')
-        csv_row: list[str] = []
         try:
-            page_text = get_page_text(link)
-            soup = get_page_soup(page_text)
-            for key in DATA_SPEC_FIELDS.values():
-                value = parse_value_from_soup(soup, key)
-                csv_row.append(value)
-
-            append_to_result(csv_row)
-            run(sleep_with_counter(17))
-
+            phone_data = get_phone_data(link)
         except Exception as e:
             print(f'Skipping {name} because of error:\n{e}')
             run(sleep_with_counter(17))
             continue
 
+        append_to_result(phone_data)
+        run(sleep_with_counter(17))
 
 
 if __name__ == '__main__':
